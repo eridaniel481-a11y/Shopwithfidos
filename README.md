@@ -1,2 +1,0 @@
-# Shopwithfidos
-E-commerce
