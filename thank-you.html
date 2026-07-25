@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Received | ShopWithFidos</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+
+<!-- ============ META PIXEL — LOADED FROM ENV, NOT HARDCODED ============
+  Same approach as steering-lock/index.html: fetches the real Pixel ID
+  from netlify/functions/public-config.js (which just echoes back the
+  META_PIXEL_ID environment variable). Does nothing until the client's
+  real ID is set in Netlify — no placeholder ID is ever shipped.
+============================================================= -->
+<script>
+  (function(){
+    fetch('/.netlify/functions/public-config')
+      .then(function(r){ return r.ok ? r.json() : null; })
+      .then(function(cfg){
+        if (!cfg || !cfg.pixelId) return;
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+        document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', cfg.pixelId);
+        fbq('track', 'PageView');
+        fbq('track', 'Lead', {content_name: 'ShopWithFidos order form', currency: 'NGN', value: 30000});
+      })
+      .catch(function(){ /* silently do nothing if the function isn't deployed yet */ });
+  })();
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --gunmetal-900:#14181c; --gunmetal-800:#1c2229; --gunmetal-700:#262e36;
+    --steel-600:#48545f; --steel-300:#9caab6; --paper:#eef1f3; --paper-dim:#c7cfd6;
+    --hazard:#f6b60b; --hazard-dark:#c98f00; --signal-red:#d64545; --ok-green:#3fae6a;
+    --radius:10px; --display:'Oswald',sans-serif; --body:'Inter',sans-serif; --mono:'IBM Plex Mono',monospace;
+  }
+  *{box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+  body{
+    margin:0; background:var(--gunmetal-900); color:var(--paper); font-family:var(--body);
+    font-size:17.5px; line-height:1.65; -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{max-width:640px; margin:0 auto; padding:40px 20px 60px;}
+  h1,h2,h3{font-family:var(--display); text-transform:uppercase; margin:0; color:var(--paper);}
+  p{color:var(--paper-dim); margin:0;}
+
+  .brand{text-align:center; font-family:var(--display); font-size:20px; font-weight:700; letter-spacing:.03em; margin-bottom:28px;}
+  .brand span{color:var(--hazard);}
+
+  .hero-card{
+    background:var(--gunmetal-800); border:1px solid var(--gunmetal-700); border-radius:var(--radius);
+    padding:32px 24px; text-align:center; margin-bottom:24px;
+  }
+  .check{
+    width:60px; height:60px; border-radius:50%; background:var(--ok-green); color:#0c1a12;
+    display:flex; align-items:center; justify-content:center; font-size:28px; margin:0 auto 18px; font-weight:700;
+  }
+  .hero-card h1{font-size:clamp(24px,6vw,32px); margin-bottom:10px;}
+  .hero-card p{font-size:17px; max-width:44ch; margin:0 auto;}
+  .ref{
+    font-family:var(--mono); font-size:14px; color:var(--hazard);
+    background:var(--gunmetal-900); border:1px solid var(--gunmetal-700); border-radius:6px;
+    padding:10px 16px; display:inline-block; margin:18px 0 0;
+  }
+
+  .card{
+    background:var(--gunmetal-800); border:1px solid var(--gunmetal-700); border-radius:var(--radius);
+    padding:24px; margin-bottom:18px;
+  }
+  .card .eyebrow{font-family:var(--mono); font-size:13px; letter-spacing:.1em; text-transform:uppercase; color:var(--hazard); font-weight:600; margin-bottom:12px; display:block;}
+
+  /* progress / timeline */
+  .timeline{display:grid; gap:0;}
+  .tl-step{display:flex; gap:14px; position:relative; padding-bottom:22px;}
+  .tl-step:last-child{padding-bottom:0;}
+  .tl-dot{
+    width:28px; height:28px; border-radius:50%; background:var(--gunmetal-700); border:2px solid var(--steel-600);
+    display:flex; align-items:center; justify-content:center; flex:none; font-family:var(--mono); font-size:13px; font-weight:700; color:var(--steel-300);
+    z-index:1;
+  }
+  .tl-step.active .tl-dot{background:var(--hazard); border-color:var(--hazard); color:#1a1400;}
+  .tl-step:not(:last-child)::before{
+    content:""; position:absolute; left:13px; top:28px; bottom:0; width:2px; background:var(--gunmetal-700);
+  }
+  .tl-body{padding-top:2px;}
+  .tl-body h3{font-size:16px; text-transform:none; font-family:var(--body); font-weight:700; color:var(--paper); margin-bottom:4px;}
+  .tl-body p{font-size:15px;}
+
+  .cod-box{display:grid; gap:10px;}
+  .cod-box li{display:flex; gap:10px; align-items:flex-start; list-style:none; font-size:15.5px; color:var(--paper-dim);}
+  .cod-box li::before{content:"✓"; color:var(--ok-green); font-weight:700; flex:none;}
+
+  .prep-box{display:grid; gap:10px;}
+  .prep-box li{display:flex; gap:10px; align-items:flex-start; list-style:none; font-size:15.5px; color:var(--paper-dim);}
+  .prep-box li::before{content:"→"; color:var(--hazard); font-weight:700; flex:none;}
+
+  a.btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px; width:100%;
+    background:var(--hazard); color:#1a1400; text-decoration:none; font-weight:700; font-size:17px;
+    padding:16px 24px; border-radius:6px; min-height:52px;
+  }
+  a.btn:hover{background:var(--hazard-dark);}
+  a.btn-ghost{background:transparent; color:var(--paper); border:1px solid var(--steel-600);}
+  .btn-row{display:grid; gap:12px; margin-top:6px;}
+  @media(min-width:480px){ .btn-row{grid-template-columns:1fr 1fr;} }
+
+  details{background:var(--gunmetal-900); border:1px solid var(--gunmetal-700); border-radius:8px; padding:14px 16px; margin-bottom:8px;}
+  summary{cursor:pointer; font-weight:600; font-size:16px; list-style:none;}
+  summary::-webkit-details-marker{display:none;}
+  summary::after{content:"+"; float:right; font-family:var(--mono); color:var(--hazard);}
+  details[open] summary::after{content:"–";}
+  details p{margin-top:8px; font-size:15px;}
+
+  .support-row{display:flex; gap:14px; flex-wrap:wrap; align-items:center; justify-content:space-between; font-size:15px;}
+  .support-row a{color:var(--hazard); font-weight:600; text-decoration:none;}
+
+  footer{text-align:center; padding-top:10px; font-size:13.5px; color:var(--steel-300);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="brand">SHOPWITH<span>FIDOS</span></div>
+
+  <div class="hero-card">
+    <div class="check">✓</div>
+    <h1>Order received</h1>
+    <p>Thanks, your Universal Car Steering Lock order is logged. Keep your phone close, we'll call or WhatsApp you shortly to confirm details before it's dispatched.</p>
+    <div class="ref">Ref: SWF-<span id="ref"></span></div>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">What happens next</span>
+    <div class="timeline">
+      <div class="tl-step active">
+        <div class="tl-dot">✓</div>
+        <div class="tl-body">
+          <h3>Order received</h3>
+          <p>Your details just reached our order desk. This step is done.</p>
+        </div>
+      </div>
+      <div class="tl-step active">
+        <div class="tl-dot">2</div>
+        <div class="tl-body">
+          <h3>Confirmation call or WhatsApp message</h3>
+          <p>Usually within a few hours, always within 24 hours. We confirm your address and preferred delivery time.</p>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">3</div>
+        <div class="tl-body">
+          <h3>Dispatch</h3>
+          <p>Once confirmed, your lock ships. Lagos addresses typically arrive within 24 hours, other states within 2 to 3 business days.</p>
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-dot">4</div>
+        <div class="tl-body">
+          <h3>Inspect and pay</h3>
+          <p>The delivery agent hands it to you, you check it's exactly as ordered, then you pay in cash or transfer. Nothing is charged before this.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">Pay on delivery, simply explained</span>
+    <ul class="cod-box">
+      <li>You don't pay anything today. No card, no transfer, no deposit.</li>
+      <li>You only pay once the item is physically in front of you and you've confirmed it's right.</li>
+      <li>Payment goes directly to the delivery agent, in cash or bank transfer, whichever is easier for you.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">Before the delivery agent arrives</span>
+    <ul class="prep-box">
+      <li>Save this number so you recognize the call: 0803 478 9777.</li>
+      <li>Keep your WhatsApp reachable, that's how we'll send delivery updates.</li>
+      <li>Have the exact payment amount ready in cash, or your bank app open if you'll transfer.</li>
+      <li>Be at the address you gave us, or let us know in advance if plans change.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">Common questions</span>
+    <details>
+      <summary>I haven't been contacted yet, is my order still valid?</summary>
+      <p>Yes. If it's been more than 24 hours and you haven't heard from us, message us on WhatsApp with your reference number and we'll check immediately.</p>
+    </details>
+    <details>
+      <summary>Can I change my delivery address?</summary>
+      <p>Yes, just let us know during the confirmation call or by WhatsApp before dispatch. Once it's on the way, changes get harder to make.</p>
+    </details>
+    <details>
+      <summary>What if I'm not around when the agent arrives?</summary>
+      <p>Let us know in advance and we'll reschedule. Missed deliveries with no notice can delay your order and add extra delivery costs.</p>
+    </details>
+  </div>
+
+  <div class="card">
+    <span class="eyebrow">Need us sooner?</span>
+    <div class="support-row">
+      <span>Reach us directly and we'll respond as fast as we can.</span>
+      <a id="waLink" href="#" target="_blank" rel="noopener">Message us on WhatsApp →</a>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <a class="btn" id="waCta" href="#" target="_blank" rel="noopener">Confirm faster on WhatsApp</a>
+    <a class="btn btn-ghost" href="/steering-lock/">Back to product page</a>
+  </div>
+
+  <p style="text-align:center; margin-top:10px;"><a href="/" style="font-size:13.5px; color:var(--steel-300); text-decoration:underline;">Or go to the ShopWithFidos homepage</a></p>
+
+  <footer>
+    <p>ShopWithFidos, Pay on Delivery, nationwide. This site is not part of the Facebook website or Meta Inc.</p>
+  </footer>
+</div>
+
+<script>
+  const ref = 'SWF-' + Date.now().toString().slice(-6);
+  document.getElementById('ref').textContent = ref.replace('SWF-', '');
+
+  // Pre-filled WhatsApp click-to-chat so the customer can confirm instantly
+  // without waiting for our outbound call, reduces anxiety and speeds up
+  // confirmation without requiring any customer email address.
+  const waMessage = encodeURIComponent(
+    `Hi ShopWithFidos, I just placed an order (Ref: ${ref}) for the Universal Car Steering Lock. Please confirm my delivery details.`
+  );
+  const waUrl = `https://wa.me/2348034789777?text=${waMessage}`;
+  document.getElementById('waLink').href = waUrl;
+  document.getElementById('waCta').href = waUrl;
+</script>
+</body>
+</html>
