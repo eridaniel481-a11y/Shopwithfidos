@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ShopWithFidos | Quality Products, Pay on Delivery Nationwide</title>
+<meta name="description" content="ShopWithFidos brings you quality, useful products with pay on delivery, nationwide across Nigeria. Browse what's currently available.">
+<link rel="canonical" href="https://shopwithfidos.online/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ShopWithFidos">
+<meta property="og:title" content="ShopWithFidos | Quality Products, Pay on Delivery Nationwide">
+<meta property="og:description" content="Quality, useful products with pay on delivery, nationwide across Nigeria.">
+<meta property="og:url" content="https://shopwithfidos.online/">
+<meta property="og:image" content="https://shopwithfidos.online/assets/product-demo-poster.jpg">
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ShopWithFidos | Quality Products, Pay on Delivery Nationwide">
+<meta name="twitter:description" content="Quality, useful products with pay on delivery, nationwide across Nigeria.">
+<meta name="twitter:image" content="https://shopwithfidos.online/assets/product-demo-poster.jpg">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --gunmetal-900:#14181c; --gunmetal-800:#1c2229; --gunmetal-700:#262e36;
+    --paper:#eef1f3; --paper-dim:#c7cfd6; --hazard:#f6b60b; --hazard-dark:#c98f00;
+  }
+  *{box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce){ *{animation:none !important; transition:none !important;} }
+  body{
+    margin:0; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    background:var(--gunmetal-900); color:var(--paper); font-family:'Inter',sans-serif; padding:24px; text-align:center;
+  }
+  a{color:inherit;}
+  .brand{font-family:'Oswald',sans-serif; font-weight:700; font-size:28px; letter-spacing:.03em; text-transform:uppercase; margin-bottom:18px;}
+  .brand span{color:var(--hazard);}
+  h1{font-family:'Oswald',sans-serif; font-weight:600; font-size:clamp(22px,5vw,30px); text-transform:uppercase; margin:0 0 14px; max-width:20ch;}
+  p{color:var(--paper-dim); font-size:17px; line-height:1.6; max-width:44ch; margin:0 auto 30px;}
+  a.btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    background:var(--hazard); color:#1a1400; text-decoration:none; font-weight:700; font-size:18px;
+    padding:16px 32px; border-radius:6px; min-height:52px; transition:background .15s ease;
+  }
+  a.btn:hover, a.btn:focus-visible{background:var(--hazard-dark);}
+  a.btn:focus-visible{outline:3px solid var(--paper); outline-offset:3px;}
+  footer{margin-top:48px; font-size:13.5px; color:#6b7680;}
+  footer a{color:#8a95a0; text-decoration:underline;}
+</style>
+</head>
+<body>
+  <main>
+    <div class="brand">SHOPWITH<span>FIDOS</span></div>
+    <h1>Welcome to ShopWithFidos</h1>
+    <p>Quality, useful products delivered nationwide across Nigeria. Pay only once it's in your hands.</p>
+    <a class="btn" href="/steering-lock/">Shop the Steering Lock →</a>
+  </main>
+  <footer>
+    <p>© <span id="year"></span> ShopWithFidos. All rights reserved. | <a href="/privacy-policy.html">Privacy</a> | <a href="/terms-and-conditions.html">Terms</a></p>
+  </footer>
+  <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+  </html>
