@@ -60,6 +60,9 @@
         fbq('init', cfg.pixelId);
         fbq('track', 'PageView');
         fbq('track', 'ViewContent', {content_name: 'ShopWithFidos Steering Wheel Lock'});
+        // Conversion event name comes from META_EVENT_NAME (via public-config),
+        // falling back to 'Purchase' if it isn't set.
+        window.__metaEventName = (cfg.eventName || '').trim() || 'Purchase';
         window.__metaPixelReady = true;
       })
       .catch(function(){ /* silently do nothing if the function isn't deployed yet */ });
@@ -735,7 +738,8 @@
         form.reset();
 
         // Fires only if the Pixel actually loaded (i.e. META_PIXEL_ID is set in Netlify) — safe no-op otherwise.
-        if (window.fbq) fbq('track', 'Lead', { content_name: data.package }, { eventID: eventId });
+        // Event name is config-driven (META_EVENT_NAME), defaulting to 'Purchase'.
+        if (window.fbq) fbq('track', window.__metaEventName || 'Purchase', { content_name: data.package }, { eventID: eventId });
 
         window.location.href = '../thank-you.html?ref=' + encodeURIComponent(orderRef);
       } else {

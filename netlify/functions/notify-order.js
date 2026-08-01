@@ -12,7 +12,7 @@
 //   3. Customer       — a confirmation email, only sent if the customer
 //                       filled in the optional email field on the form.
 //
-// It also optionally fires the Meta Conversions API "Lead" event
+// It also optionally fires the Meta Conversions API conversion event
 // server-side, de-duplicated against the browser Pixel event using the
 // shared meta_event_id the form already submits.
 //
@@ -26,8 +26,18 @@
 // Optional:
 //   SUPPORT_EMAIL     — a second internal inbox to CC on every order
 //   META_PIXEL_ID / META_ACCESS_TOKEN — from the client, once he sends them (see META-SETUP-GUIDE-FOR-CLIENT.md)
+//   META_EVENT_NAME  — the conversion event to report; defaults to 'Purchase' when unset or empty
 
 const crypto = require('crypto');
+
+// Config-driven Meta conversion event name. Change it by updating the
+// META_EVENT_NAME environment variable in Netlify and redeploying — never
+// by editing this file. Missing/empty values fall back to 'Purchase'.
+const DEFAULT_META_EVENT_NAME = 'Purchase';
+
+function getMetaEventName() {
+  return (process.env.META_EVENT_NAME || '').trim() || DEFAULT_META_EVENT_NAME;
+}
 
 function hashSha256(value) {
   return crypto.createHash('sha256').update(String(value).trim().toLowerCase()).digest('hex');
@@ -206,11 +216,12 @@ exports.handler = async (event) => {
     }
   }
 
-  // Optional: server-side Meta Conversions API Lead event.
+  // Optional: server-side Meta Conversions API conversion event.
   // Only fires once the client has sent both values and they're set as
   // Netlify environment variables — safe to leave unset until then.
   const META_PIXEL_ID = process.env.META_PIXEL_ID;
   const META_ACCESS_TOKEN = process.env.META_ACCESS_TOKEN;
+  const META_EVENT_NAME = getMetaEventName();
 
   if (META_PIXEL_ID && META_ACCESS_TOKEN) {
     try {
@@ -230,7 +241,7 @@ exports.handler = async (event) => {
           body: JSON.stringify({
             data: [
               {
-                event_name: 'Lead',
+                event_name: META_EVENT_NAME,
                 event_time: Math.floor(Date.now() / 1000),
                 event_id: data.meta_event_id || undefined, // matches the browser Pixel event so Meta counts one conversion, not two
                 action_source: 'website',
